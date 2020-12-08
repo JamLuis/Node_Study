@@ -1,0 +1,75 @@
+node-fs
+官方文档    http://nodejs.cn/api/fs.html
+
+需要导入的库
+const fs = require("fs");
+const path = require("path");
+
+使用场景
+1.同步递归创建目录
+
+let mkdirsSync = function mkdirsSync (dirname){
+	if(fs.existsSync(dirname)){
+		return true;
+	} else {
+		if( mkdirsSync(path.dirname(dirname))){
+			fs.mkdirsSync(dirname);
+			return true;
+		}
+	}
+}
+
+
+2.文档流读取写入（文件的复制/文件的写入）
+	2.1 简单的同步方式（同步可避免读写速度不一致，导致文档流缺失的问题）
+	let readStream = fs.createReadStream(sourcePath);
+	let writeStream = fs.createWriteStream(targetPath);
+	readStream.pipe(writeStream);
+	
+	2.2 异步的向文件追加写入内容
+	fs.readFile(filePath, (err, data) =>{
+		if(err) throw err;
+		fs.appendFile(targetFilePath, data, 'utf-8', (err) =>{})    
+		// targetFilePath 写入的文件路径， data 需要写入的内容， encoding  文件编码
+	})
+
+
+3.文件的删除
+fs.unlink(path, callback) 异步地删除文件或符号链接
+fs.unlinkSync(path) 同步地删除文件或符号链接
+
+文件夹的删除
+fs.rmdir
+fs.rmdirSync
+
+读取目录下文件
+fs.readdirSync(path[,options])
+返回files (是目录中文件的名称的数组)
+
+读取文件/目录状态 
+fs.statSync(path)
+返回 fs.Stats 
+stat 常用方法
+	isDirectory()
+	如果 fs.Stats 对象描述文件系统目录，则返回 true。
+	
+	stats.isFile()
+	如果 fs.Stats 对象描述普通的文件，则返回 true。
+
+	stats.isSocket()
+	如果 fs.Stats 对象描述套接字，则返回 true。
+	stats.size
+	文件的大小（以字节为单位）。
+	其他用法参照官网： http://nodejs.cn/api/fs.html#fs_class_fs_stats
+
+	应用： 删除指定目录下的所有文件以及目录文件夹
+	if (fs.existsSync(targetPath)) {
+    let files = fs.readdirSync(targetPath);
+    files.map((file, index) => {
+      let filePath = path.join(targetPath, file);
+      if (fs.statSync(filePath).isFile()) {
+        fs.unlinkSync(filePath);
+      }
+    })
+    fs.rmdirSync(targetPath);
+  }
