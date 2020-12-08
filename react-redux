@@ -1,0 +1,41 @@
+1.redux 核心思想
+1.1redux 主要包括内容
+1.1.1 action
+      state的修改必须通过action,
+        action模板
+        {type: 'REQUEST_USER', payload: {}}
+
+1.1.2 reducer 
+      描述： 用来接收action修改state对象
+      模板
+      defaultState={
+        user: null
+      }
+      function user(state=defaultState, actions){
+        switch(actions.type){
+          case 'REQUEST_USER':
+            return Object.assign({}, stae, {user: actions.payload})
+          default:
+            return state;
+        }
+      }
+1.2更新
+  要想更新 state 中的数据，你需要发起一个 action。Action 就是一个普通 JavaScript 对象
+  reducer 接收 action传过来的 参数，对state状态树进行更新
+  注： redux 实际为存储在内存中的变量。
+1.3三大原则
+  1. 单一数据源
+  整个应用的state 被存放在一个 object tree 中，并且这个 tree 仅存在于store 中
+  2. state 只读
+  仅被action 修改
+  3.纯函数模式
+  
+  多个reducer合并
+  
+  import { combineReducers, createStore } from 'redux'
+  let reducer = combineReducers({ user, todos })
+  let store = createStore(reducer)
+  
+  
+
+2.原理及实现
