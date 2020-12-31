@@ -1,0 +1,16 @@
+koa框架搭建
+koa-generator
+
+npm install -g koa-generator
+koa 项目路径和名称
+koa2 项目路径和名称
+
+
+
+koa之热加载
+
+1.  npm install nodemon --save
+2.  修改项目目录下package.json
+  "scripts": {
+    "start": "nodemon node bin/www"
+  }
